@@ -364,9 +364,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ============ SUPABASE SETUP — replace these with your actual keys ============ */
-const SUPABASE_URL = 'https://ucpjxoktycmlpwiltdl.supabase.co';  
+const SUPABASE_URL = 'https://ucpjxoktycmlpwiltdl.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_oTkiUQF3m9OquAlvKDrFjw_bmS_UX2Y';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let currentUserId = null;
 
@@ -429,7 +429,7 @@ async function sset(key, val){
 async function trackEvent(event, properties = {}){
   if (!currentUserId) return;
   try{
-    await supabase.from('events').insert([{
+    await supabaseClient.from('events').insert([{
       user_id: currentUserId,
       event,
       properties
@@ -448,7 +448,7 @@ function daysAgo(n){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDat
 
 async function initState(){
   try{
-    const { data, error } = await supabase.auth.signInAnonymously();
+    const { data, error } = await supabaseClient.auth.signInAnonymously();
     if (error) throw error;
     currentUserId = data.session.user.id;
   } catch (e) {
